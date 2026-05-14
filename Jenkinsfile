@@ -1,35 +1,52 @@
 pipeline {
     agent any
-
     stages {
-
-        stage('Checkout') {
+        stage('Build') {
             steps {
-                git branch: 'main', url: 'https://github.com/Aayushphuyal/8.2CDevSecOps.git'
+                echo 'Task: Build, compile, and package the code'
+                echo 'Tool: Maven'
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Unit and Integration Tests') {
             steps {
-                bat 'npm install'
+                echo 'Task: Run unit tests and integration tests'
+                echo 'Tool: JUnit and Selenium'
             }
         }
 
-        stage('Run Tests') {
+        stage('Code Analysis') {
             steps {
-                bat 'npm test || exit /b 0'
+                echo 'Task: Analyse code quality and check industry standards'
+                echo 'Tool: SonarQube'
             }
         }
 
-        stage('Generate Coverage Report') {
+        stage('Security Scan') {
             steps {
-                bat 'npm run coverage || exit /b 0'
+                echo 'Task: Scan the code and dependencies for vulnerabilities'
+                echo 'Tool: Snyk'
             }
         }
 
-        stage('NPM Audit (Security Scan)') {
+        stage('Deploy to Staging') {
             steps {
-                bat 'npm audit || exit /b 0'
+                echo 'Task: Deploy the application to a staging server'
+                echo 'Tool: AWS EC2'
+            }
+        }
+
+        stage('Integration Tests on Staging') {
+            steps {
+                echo 'Task: Run integration tests in staging environment'
+                echo 'Tool: Postman/Newman'
+            }
+        }
+
+        stage('Deploy to Production') {
+            steps {
+                echo 'Task: Deploy the application to production server'
+                echo 'Tool: AWS EC2'
             }
         }
     }
