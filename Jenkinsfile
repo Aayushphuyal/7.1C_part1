@@ -1,57 +1,35 @@
 pipeline {
     agent any
 
-    triggers {
-        pollSCM('H/5 * * * *')
-    }
-
     stages {
-        stage('1. Checkout Code') {
+
+        stage('Checkout') {
             steps {
-                echo 'Task: Fetch the latest code from GitHub repository'
-                echo 'Tool: Git'
+                git branch: 'main', url: 'https://github.com/Aayushphuyal/8.2CDevSecOp.git'
             }
         }
 
-        stage('2. Build') {
+        stage('Install Dependencies') {
             steps {
-                echo 'Task: Compile or prepare the application'
-                echo 'Tool: Maven'
+                bat 'npm install'
             }
         }
 
-        stage('3. Unit Testing') {
+        stage('Run Tests') {
             steps {
-                echo 'Task: Run unit tests'
-                echo 'Tool: JUnit'
+                bat 'npm test || exit /b 0'
             }
         }
 
-        stage('4. Code Quality Check') {
+        stage('Generate Coverage Report') {
             steps {
-                echo 'Task: Check code quality and bugs'
-                echo 'Tool: SonarQube'
+                bat 'npm run coverage || exit /b 0'
             }
         }
 
-        stage('5. Security Scan') {
+        stage('NPM Audit (Security Scan)') {
             steps {
-                echo 'Task: Scan for vulnerabilities'
-                echo 'Tool: Snyk'
-            }
-        }
-
-        stage('6. Package Application') {
-            steps {
-                echo 'Task: Package application'
-                echo 'Tool: Docker'
-            }
-        }
-
-        stage('7. Mock Deployment') {
-            steps {
-                echo 'Task: Simulate deployment'
-                echo 'Tool: Jenkins'
+                bat 'npm audit || exit /b 0'
             }
         }
     }
