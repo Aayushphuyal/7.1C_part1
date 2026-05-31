@@ -1,6 +1,8 @@
 pipeline {
     agent any
+
     stages {
+
         stage('Build') {
             steps {
                 echo 'Task: Build, compile, and package the code'
@@ -48,6 +50,25 @@ pipeline {
                 echo 'Task: Deploy the application to production server'
                 echo 'Tool: AWS EC2'
             }
+        }
+    }
+
+    post {
+        always {
+            emailext(
+                subject: "Jenkins Build ${currentBuild.currentResult}",
+                body: """
+Build Status: ${currentBuild.currentResult}
+
+Job Name: ${env.JOB_NAME}
+Build Number: ${env.BUILD_NUMBER}
+
+The pipeline execution has completed.
+Please find the build log attached.
+                """,
+                to: "aayushphuyal33@gmail.com",
+                attachLog: true
+            )
         }
     }
 }
