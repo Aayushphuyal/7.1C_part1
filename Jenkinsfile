@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     stages {
-
         stage('Build') {
             steps {
                 echo 'Task: Build, compile, and package the code'
@@ -57,15 +56,7 @@ pipeline {
         always {
             emailext(
                 subject: "Jenkins Build ${currentBuild.currentResult}",
-                body: """
-Build Status: ${currentBuild.currentResult}
-
-Job Name: ${env.JOB_NAME}
-Build Number: ${env.BUILD_NUMBER}
-
-The pipeline execution has completed.
-Please find the build log attached.
-                """,
+                body: "Pipeline completed. Build log is attached.",
                 to: "aayushphuyal33@gmail.com",
                 attachLog: true
             )
